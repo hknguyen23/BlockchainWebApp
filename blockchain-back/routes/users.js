@@ -10,8 +10,23 @@ router.get('/', function (req, res, next) {
   res.send('respond with a resource');
 });
 
+router.get('/:userID', async (req, res, next) => {
+  const id = req.params.userID;
+  const user = await userModel.getUserByID(id);
+
+  if (user.length === 0) {
+    return res.send({ success: false });
+  }
+
+  console.log('fetch');
+
+  const wallet = await walletModel.getWalletByID(user[0].WalletID);
+  delete user[0].WalletID;
+
+  return res.send({ success: true, user: { ...user[0], wallet: wallet[0] } });
+});
+
 router.post('/signIn', async (req, res, next) => {
-  console.log(req.body);
   const { username, password } = req.body;
   const user = await userModel.getUserByUsername(username);
 
@@ -30,7 +45,6 @@ router.post('/signIn', async (req, res, next) => {
 });
 
 router.post('/signUp', async (req, res, next) => {
-  console.log(req.body);
   const { name, username, email, password } = req.body;
 
   // Check the same username

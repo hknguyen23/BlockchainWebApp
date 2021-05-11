@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -9,8 +9,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
-const API_URL = "http://localhost:5000";
+import { signInUser } from '../../services/UserService';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,10 +37,6 @@ export default function SignIn({ isLoggedIn, setIsLoggedIn }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    setIsLoggedIn(isLoggedIn);
-  }, [isLoggedIn, setIsLoggedIn]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = {
@@ -49,19 +44,13 @@ export default function SignIn({ isLoggedIn, setIsLoggedIn }) {
       password: password
     }
 
-    fetch(API_URL + "/users/signIn/", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then(response => response.json())
+    signInUser(data)
       .then(result => {
         if (result.success) {
           localStorage.setItem('userID', result.user.ID);
           setIsLoggedIn(true);
         } else {
+          setIsLoggedIn(false);
           window.alert(result.msg);
         }
       })
@@ -77,6 +66,7 @@ export default function SignIn({ isLoggedIn, setIsLoggedIn }) {
   if (isLoggedIn) {
     return <Redirect to='/'></Redirect>;
   }
+
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>

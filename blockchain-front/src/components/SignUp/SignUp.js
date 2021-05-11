@@ -9,8 +9,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
-const API_URL = "http://localhost:5000";
+import { signUpUser } from '../../services/UserService';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -47,16 +46,9 @@ export default function SignUp({ setIsLoggedIn }) {
       username: username,
       email: email,
       password: password
-    };
+    }
 
-    fetch(API_URL + "/users/signUp/", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then(response => response.json())
+    signUpUser(data)
       .then(result => {
         if (result.success) {
           setIsLoggedIn(true);

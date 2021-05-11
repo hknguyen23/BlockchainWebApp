@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   buttonText: {
     margin: '10px',
     minWidth: '100px',
-    fontSize: '14pt',
+    fontSize: '12pt',
     fontWeight: 'bold',
     color: '#2f85fa',
     textAlign: 'center'
@@ -59,6 +59,10 @@ export default function Header({ isLoggedIn, setIsLoggedIn }) {
     localStorage.removeItem('userID');
     setIsLoggedIn(false);
     history.push('/');
+  }
+
+  const handleProfile = () => {
+    history.push('/profile');
   }
 
   return (
@@ -79,19 +83,15 @@ export default function Header({ isLoggedIn, setIsLoggedIn }) {
 
           {isLoggedIn
             ? <React.Fragment>
-              <Button className={classes.button} variant="contained">
-                <Link to='/profile' style={{ textDecoration: 'none' }}>
-                  <Typography className={classes.buttonText}>
-                    Profile
+              <Button className={classes.button} variant="contained" onClick={handleProfile}>
+                <Typography className={classes.buttonText}>
+                  Profile
                   </Typography>
-                </Link>
               </Button>
-              <Button className={classes.button} variant="contained">
-                <Link style={{ textDecoration: 'none' }} onClick={handleSignOut}>
-                  <Typography className={classes.buttonText}>
-                    Sign Out
+              <Button className={classes.button} variant="contained" onClick={handleSignOut}>
+                <Typography className={classes.buttonText}>
+                  Sign Out
                   </Typography>
-                </Link>
               </Button>
             </React.Fragment>
             : <React.Fragment>
