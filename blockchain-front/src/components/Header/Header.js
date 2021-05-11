@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import {
   Button,
   Typography,
@@ -53,6 +53,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header({ isLoggedIn, setIsLoggedIn }) {
   const classes = useStyles();
+  const history = useHistory();
+
+  const handleSignOut = () => {
+    localStorage.removeItem('userID');
+    setIsLoggedIn(false);
+    history.push('/');
+  }
 
   return (
     <div>
@@ -80,7 +87,7 @@ export default function Header({ isLoggedIn, setIsLoggedIn }) {
                 </Link>
               </Button>
               <Button className={classes.button} variant="contained">
-                <Link to='/' style={{ textDecoration: 'none' }}>
+                <Link style={{ textDecoration: 'none' }} onClick={handleSignOut}>
                   <Typography className={classes.buttonText}>
                     Sign Out
                   </Typography>

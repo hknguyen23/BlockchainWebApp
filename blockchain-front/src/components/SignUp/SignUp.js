@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-const API_URL = "https://localhost:5000";
+const API_URL = "http://localhost:5000";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+export default function SignUp({ setIsLoggedIn }) {
   const history = useHistory();
   const classes = useStyles();
   const [name, setName] = useState("");
@@ -48,7 +48,6 @@ export default function SignUp() {
       email: email,
       password: password
     };
-    console.log(data);
 
     fetch(API_URL + "/users/signUp/", {
       method: 'POST',
@@ -59,10 +58,16 @@ export default function SignUp() {
     })
       .then(response => response.json())
       .then(result => {
-        console.log(result);
-        window.alert(result.msg);
+        if (result.success) {
+          setIsLoggedIn(true);
+          history.push('/');
+        } else {
+          window.alert(result.msg);
+        }
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        history.push('/error', { errorMessage: error });
+      });
   }
 
   const signInClicked = () => {
@@ -110,7 +115,7 @@ export default function SignUp() {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link onClick={signInClicked} variant="body2">
+              <Link onClick={signInClicked} variant="body2" style={{ cursor: 'pointer' }}>
                 Already have an account? Sign in
               </Link>
             </Grid>

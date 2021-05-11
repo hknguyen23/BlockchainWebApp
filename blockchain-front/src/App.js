@@ -25,7 +25,7 @@ export default function App() {
       main: () => <SignIn isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
     }, {
       path: "/signup",
-      main: () => <SignUp />
+      main: () => <SignUp setIsLoggedIn={setIsLoggedIn} />
     }, {
       path: "/error",
       main: () => <ErrorScreen />

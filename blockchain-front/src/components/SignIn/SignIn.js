@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-const API_URL = "https://localhost:5000";
+const API_URL = "http://localhost:5000";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -44,11 +44,11 @@ export default function SignIn({ isLoggedIn, setIsLoggedIn }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let data = {
+    const data = {
       username: username,
       password: password
-    };
-    console.log(data);
+    }
+
     fetch(API_URL + "/users/signIn/", {
       method: 'POST',
       headers: {
@@ -58,17 +58,16 @@ export default function SignIn({ isLoggedIn, setIsLoggedIn }) {
     })
       .then(response => response.json())
       .then(result => {
-        console.log(result);
         if (result.success) {
-          localStorage.setItem('userID', result.user.id);
-          localStorage.setItem('token', result.token);
+          localStorage.setItem('userID', result.user.ID);
           setIsLoggedIn(true);
-        }
-        else {
+        } else {
           window.alert(result.msg);
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        history.push('/error', { errorMessage: error });
+      });
   }
 
   const signUpClicked = () => {
@@ -101,8 +100,8 @@ export default function SignIn({ isLoggedIn, setIsLoggedIn }) {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link onClick={signUpClicked} variant="body2">
-                {"Don't have an account? Sign Up"}
+              <Link onClick={signUpClicked} variant="body2" style={{ cursor: 'pointer' }}>
+                Don't have an account? Sign Up
               </Link>
             </Grid>
           </Grid>
