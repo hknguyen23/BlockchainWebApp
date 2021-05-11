@@ -26,13 +26,13 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '16pt'
   },
   icon: {
-    width: '35px',
-    height: '35px',
+    width: '30px',
+    height: '30px',
     color: 'white'
   }
 }));
 
-export default function Home({ isLoggedIn, user }) {
+export default function Home({ isLoggedIn, user, wallet }) {
   const classes = useStyles();
   const history = useHistory();
 
@@ -62,7 +62,7 @@ export default function Home({ isLoggedIn, user }) {
             Username: {user.Username}
           </Typography>
           <Typography>
-            Your current money: {user.wallet.TotalCount}
+            Your current money: {wallet.TotalCount}
           </Typography>
         </div>
 

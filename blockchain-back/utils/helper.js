@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const moment = require("moment");
 const { v1: uuidv1 } = require('uuid');
 const v1options = { msecs: Date.now() };
 uuidv1(v1options);
@@ -17,5 +18,9 @@ module.exports = {
 
   getUUID: () => {
     return uuidv1();
+  },
+
+  convertToRegularDateTime: (date) => {
+    return moment(date).format(config.FORMAT_DATETIME_PATTER.DATE_TIME);
   }
 }

@@ -18,8 +18,6 @@ router.get('/:userID', async (req, res, next) => {
     return res.send({ success: false });
   }
 
-  console.log('fetch');
-
   const wallet = await walletModel.getWalletByID(user[0].WalletID);
   delete user[0].WalletID;
 

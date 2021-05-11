@@ -1,3 +1,8 @@
 {
-  "API_LOCAL": "http://localhost:5000"
+  "API_LOCAL": "http://localhost:5000",
+  "PAGE_SIZE": 5,
+  "FORMAT_DATETIME_PATTER": {
+    "DATE": "YYYY-MM-DD",
+    "DATE_TIME": "YYYY-MM-DD HH:mm:ss"
+  }
 }
