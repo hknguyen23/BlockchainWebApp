@@ -39,6 +39,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // require('./middlewares/routes.mdw')(app, passport);
+app.use(require('./routes'));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

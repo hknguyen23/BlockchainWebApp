@@ -1,25 +1,58 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch
+} from 'react-router-dom';
 
-function App() {
+import './App.css';
+import Header from './components/Header/Header';
+import Home from './components/Home/Home';
+import SignIn from './components/SignIn/SignIn';
+import SignUp from './components/SignUp/SignUp';
+import ErrorScreen from './components/ErrorScreen/ErrorScreen';
+
+export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('userID') !== null);
+
+  const routes = [
+    {
+      path: "/",
+      exact: true,
+      main: () => <Home />
+    }, {
+      path: "/signin",
+      main: () => <SignIn isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+    }, {
+      path: "/signup",
+      main: () => <SignUp />
+    }, {
+      path: "/error",
+      main: () => <ErrorScreen />
+    }
+  ];
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <header className="App-header">
+          <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        </header>
+        <main>
+          <Switch>
+            {routes.map((route, index) => {
+              return (
+                <Route
+                  key={index}
+                  exact={route.exact}
+                  path={route.path}
+                  children={<route.main />}
+                />
+              );
+            })}
+          </Switch>
+        </main>
+      </div>
+    </Router>
   );
 }
-
-export default App;
