@@ -9,7 +9,6 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 
 import logo from '../../resources/images/logo192.png';
-// import '../Style/Header.css';
 
 const useStyles = makeStyles((theme) => ({
   grow: {

@@ -5,45 +5,44 @@ const userModel = require('../models/userModel');
 const walletModel = require('../models/walletModel');
 const { getUUID, convertToRegularDateTime } = require('../utils/helper');
 
-router.get('/:userID', async (req, res, next) => {
-  const userID = req.params.userID;
-  console.log(userID);
-  const transactions = await transactionModel.getAllTransactionsWithUserID(userID);
+router.get('/:address', async (req, res, next) => {
+  const address = req.params.address;
+  const transactions = await transactionModel.getAllTransactionsWithSenderAddress(address);
   res.json({ success: true, msg: 'fetched', transactions });
 });
 
 router.post('/add', async (req, res, next) => {
-  const { senderID, receiverID, amount, description } = req.body;
+  const { senderAddress, receiverAddress, amount } = req.body;
+  console.log(req.body);
 
   const [sender, receiver] = await Promise.all([
-    userModel.getUserByID(senderID),
-    userModel.getUserByID(receiverID)
+    userModel.getUserByAddress(senderAddress),
+    userModel.getUserByAddress(receiverAddress)
   ]);
 
   if (sender.length === 0) {
-    return res.json({ success: false, msg: 'No sender with ID: ' + senderID });
+    return res.json({ success: false, msg: 'No sender with address: ' + senderAddress });
   }
   if (receiver.length === 0) {
-    return res.json({ success: false, msg: 'No receiver with ID: ' + receiverID });
+    return res.json({ success: false, msg: 'No receiver with address: ' + receiverAddress });
   }
 
   const [senderWallet, receiverWallet] = await Promise.all([
-    walletModel.getWalletByUserID(senderID),
-    walletModel.getWalletByUserID(receiverID)
+    walletModel.getWalletByAddress(senderAddress),
+    walletModel.getWalletByAddress(receiverAddress)
   ]);
 
   const [updateSenderWallet, updateReceiverWallet] = await Promise.all([
-    walletModel.updateWallet(senderWallet[0].ID, { TotalCount: senderWallet[0].TotalCount - amount }),
-    walletModel.updateWallet(receiverWallet[0].ID, { TotalCount: receiverWallet[0].TotalCount + amount })
+    walletModel.updateWallet(senderAddress, { Balance: senderWallet[0].Balance - amount }),
+    walletModel.updateWallet(receiverAddress, { Balance: receiverWallet[0].Balance + amount })
   ]);
 
   const entity = {
     ID: getUUID(),
     Amount: amount,
-    Description: description,
     DateAdded: convertToRegularDateTime(Date.now()),
-    SenderID: senderID,
-    ReceiverID: receiverID
+    SenderAddress: senderAddress,
+    ReceiverAddress: receiverAddress
   }
 
   const addTransaction = await transactionModel.addTransaction(entity);

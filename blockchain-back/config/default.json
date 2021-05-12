@@ -19,7 +19,7 @@
     "CURRENT": "http://localhost:3000"
   },
   "PORT": 5000,
-  "PASSPORT_KEY": "secretkey",
+  "PASS": "secretkey",
   "HASH_ROUND": 10,
   "APP_LOCAL": "http://localhost:3000",
   "FORMAT_DATETIME_PATTER": {

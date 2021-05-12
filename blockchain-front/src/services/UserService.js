@@ -37,16 +37,4 @@ async function getUser(id) {
   }).then(res => res.json());
 }
 
-async function updateProject(data) {
-  return await fetch(`${API_URL}/projects/update/`, {
-    method: 'PUT',
-    body: JSON.stringify(data),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
-    }
-  }).then(res => res.json());
-}
-
 export { signInUser, signUpUser, getUser }

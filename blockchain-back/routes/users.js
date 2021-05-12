@@ -4,10 +4,11 @@ const router = express.Router();
 const userModel = require('../models/userModel');
 const walletModel = require('../models/walletModel');
 const { checkPassword, hashPassword, getUUID } = require('../utils/helper');
+const { generatePrivateKey, getPublicKeyFromPrivateKey } = require('../models/wallet');
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-  res.send('respond with a resource');
+  res.send("Users");
 });
 
 router.get('/:userID', async (req, res, next) => {
@@ -18,7 +19,9 @@ router.get('/:userID', async (req, res, next) => {
     return res.send({ success: false });
   }
 
-  const wallet = await walletModel.getWalletByID(user[0].WalletID);
+  console.log(user[0]);
+
+  const wallet = await walletModel.getWalletByAddress(user[0].WalletAddress);
   delete user[0].WalletID;
 
   return res.send({ success: true, user: { ...user[0], wallet: wallet[0] } });
@@ -52,10 +55,14 @@ router.post('/signUp', async (req, res, next) => {
   }
 
   // create a wallet for user
+  const privateKey = generatePrivateKey().toString();
   const wallet = {
     ID: getUUID(),
-    TotalCount: 100
+    Balance: 100,
+    PrivateKey: privateKey,
+    PublicKey: getPublicKeyFromPrivateKey(privateKey)
   }
+
   const addWallet = await walletModel.addWallet(wallet);
   if (addWallet.affectedRows !== 1) {
     return res.json({ success: false, msg: 'Something wrong happened when creating wallet for user' });

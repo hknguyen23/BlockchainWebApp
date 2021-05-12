@@ -3,12 +3,12 @@ const router = express.Router();
 const walletModel = require('../models/walletModel');
 
 router.put('/update', async (req, res, next) => {
-  const { id, money } = req.body;
+  const { publicKey, money } = req.body;
   const wallet = {
-    ID: id,
-    TotalCount: money
+    PublicKey: publicKey,
+    Balance: money
   }
-  const updateWallet = await walletModel.updateWallet(id, { TotalCount: wallet.TotalCount });
+  const updateWallet = await walletModel.updateWallet(publicKey, { Balance: wallet.Balance });
   if (updateWallet.affectedRows === 1) {
     return res.json({ success: true, msg: 'updated', wallet });
   } else {

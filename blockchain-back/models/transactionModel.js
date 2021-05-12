@@ -1,13 +1,12 @@
 const db = require('../utils/database');
 
 module.exports = {
-
-  getAllTransactionsWithUserID: userID => db.load(`
-    SELECT T.ID as id, T.*, U.Name As Receiver 
-    FROM Transactions T JOIN Users U ON T.ReceiverID = U.ID
-    WHERE T.SenderID = ${userID}
-    ORDER BY T.DateAdded DESC
-  `),
+  getAllTransactionsWithSenderAddress: address => db.loadSafe(`
+    SELECT ID as id, Amount as amount, DateAdded as dateAdded, ReceiverAddress as receiver
+    FROM Transactions
+    WHERE SenderAddress = ?
+    ORDER BY DateAdded DESC
+  `, address),
 
   addTransaction: entity => db.add('Transactions', entity),
 
