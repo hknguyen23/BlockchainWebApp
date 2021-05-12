@@ -13,15 +13,13 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
     display: 'flex',
     justifyContent: 'center',
-    alignContent: 'center'
+    alignItems: 'center'
   },
   title: {
     marginTop: '30px',
     fontSize: '36pt'
   },
   text: {
-    marginTop: 'auto',
-    marginBottom: 'auto',
     textAlign: 'center',
     fontSize: '16pt'
   },
@@ -57,11 +55,11 @@ export default function Home({ isLoggedIn, user, wallet }) {
       <Typography className={classes.title}>WELCOME TO MY COIN</Typography>
       <div className={classes.container}>
 
-        <div className={classes.text}>
-          <Typography>
+        <div>
+          <Typography className={classes.text}>
             Username: {user.Username}
           </Typography>
-          <Typography>
+          <Typography className={classes.text}>
             Your current money: {wallet.Balance}
           </Typography>
         </div>

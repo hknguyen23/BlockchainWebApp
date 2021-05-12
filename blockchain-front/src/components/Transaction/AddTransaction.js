@@ -85,6 +85,8 @@ export default function AddTransaction({ wallet }) {
     const tempErrors = { ...errors }
     if (values.receiver === '') {
       tempErrors.receiver = '* Must not be empty';
+    } else if (values.receiver === wallet.PublicKey) {
+      tempErrors.receiver = '* You can\'t send coins to yourself';
     }
     if (values.amount === '') {
       tempErrors.amount = '* Must not be empty';
@@ -98,27 +100,27 @@ export default function AddTransaction({ wallet }) {
     if (hasError) {
       setIsError(true);
       window.scrollTo(0, 0);
-    }
+    } else {
+      const data = {
+        senderAddress: wallet.PublicKey,
+        receiverAddress: values.receiver,
+        amount: +values.amount
+      }
 
-    const data = {
-      senderAddress: wallet.PublicKey,
-      receiverAddress: values.receiver,
-      amount: +values.amount
+      addTransaction(data)
+        .then(result => {
+          setIsSuccessRequest(result.success);
+          setOpenSnackbar(true);
+          if (result.success) {
+            setResponseMessage('Successfully proceeded');
+          } else {
+            setResponseMessage(result.msg);
+          }
+        })
+        .catch(error => {
+          history.push('/error', { errorMessage: error });
+        });
     }
-
-    addTransaction(data)
-      .then(result => {
-        setIsSuccessRequest(result.success);
-        setOpenSnackbar(true);
-        if (result.success) {
-          setResponseMessage('Successfully proceeded');
-        } else {
-          setResponseMessage(result.msg);
-        }
-      })
-      .catch(error => {
-        history.push('/error', { errorMessage: error });
-      });
   }
 
   const handleCloseSnackbar = () => {

@@ -13,7 +13,10 @@ router.get('/:address', async (req, res, next) => {
 
 router.post('/add', async (req, res, next) => {
   const { senderAddress, receiverAddress, amount } = req.body;
-  console.log(req.body);
+
+  if (senderAddress === receiverAddress) {
+    return res.json({ success: false, msg: 'Sender address is the same as the receiver address' });
+  }
 
   const [sender, receiver] = await Promise.all([
     userModel.getUserByAddress(senderAddress),

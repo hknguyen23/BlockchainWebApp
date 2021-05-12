@@ -46,10 +46,13 @@ export default function Profile({ user, wallet }) {
           Hi, {user.Name}
         </Typography>
         <Typography className={classes.text}>
+          Your public address: {user.WalletAddress}
+        </Typography>
+        <Typography className={classes.text}>
           Balance: {wallet.Balance}
         </Typography>
         <Typography className={classes.text}>
-          Total transactions: {transactionCount}
+          Total transactions made: {transactionCount}
         </Typography>
       </div>
     </React.Fragment>

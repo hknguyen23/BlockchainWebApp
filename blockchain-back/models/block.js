@@ -1,24 +1,28 @@
 const CryptoJS = require('crypto-js');
 
 class Block {
-  constructor(index, previousHash, timestamp, data, hash) {
+  constructor(index, hash, previousHash, timestamp, data, difficulty, nonce) {
     this.index = index;
-    this.previousHash = previousHash.toString();
+    this.previousHash = previousHash;
     this.timestamp = timestamp;
     this.data = data;
-    this.hash = hash.toString();
+    this.hash = hash;
+    this.difficulty = difficulty;
+    this.nonce = nonce;
   }
 }
 
-Block.prototype.calculateHash = (index, previousHash, timestamp, data) => {
-  return CryptoJS.SHA256(index + previousHash + timestamp + data).toString();
+const blockchain = [getGenesisBlock()];
+
+const calculateHash = (index, previousHash, timestamp, data, difficulty, nonce) => {
+  return CryptoJS.SHA256(index + previousHash + timestamp + data + difficulty + nonce).toString();
 }
 
-Block.prototype.getLatestBlock = () => {
-
+const getLatestBlock = () => {
+  return blockchain[blockchain.length - 1];
 }
 
-Block.prototype.generateBlock = (blockData) => {
+const generateBlock = (blockData) => {
   const previousBlock = getLatestBlock();
   const nextIndex = previousBlock.index + 1;
   const nextTimestamp = new Date().getTime() / 1000;
@@ -26,17 +30,17 @@ Block.prototype.generateBlock = (blockData) => {
   return new Block(nextIndex, previousBlock.hash, nextTimestamp, blockData, nextHash);
 }
 
-Block.prototype.getGenesisBlock = () => {
-  return new Block(0, "0", new Date().getTime / 1000, "This is my genesis block",
-    "816534932c2b7154836da6afc367695e6337db8a921823784c14378abed4f7d7"
+const getGenesisBlock = () => {
+  return new Block(
+    0, '816534932c2b7154836da6afc367695e6337db8a921823784c14378abed4f7d7', '', 1465154705, [], 0, 0
   );
 }
 
-Block.prototype.calculateHashForBlock = (block) => {
+const calculateHashForBlock = (block) => {
   return calculateHash(block.index, block.previousHash, block.timestamp, block.data);
 }
 
-Block.prototype.isValidNewBlock = (newBlock, previousBlock) => {
+const isValidNewBlock = (newBlock, previousBlock) => {
   if (previousBlock.index + 1 !== newBlock.index) {
     console.log('invalid index');
     return false;
