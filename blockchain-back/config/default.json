@@ -1,8 +1,17 @@
 {
+  "MYSQL": {
+    "connectionLimit": 10,
+    "host": "localhost",
+    "port": 3306,
+    "user": "root",
+    "password": "root",
+    "database": "blockchainwebapp",
+    "insecureAuth": true
+  },
   "API": {
-    "LOCAL": "http://localhost:5000",
+    "LOCAL": "",
     "ONLINE": "",
-    "CURRENT": "http://localhost:5000"
+    "CURRENT": ""
   },
   "HOST": {
     "LOCAL": "http://localhost:3000",
@@ -10,7 +19,8 @@
     "CURRENT": "http://localhost:3000"
   },
   "PORT": 5000,
-  "PASS": "secretkey",
+  "PASSPORT_KEY": "secretkey",
+  "HASH_ROUND": 10,
   "APP_LOCAL": "http://localhost:3000",
   "FORMAT_DATETIME_PATTER": {
     "DATE": "YYYY-MM-DD",
