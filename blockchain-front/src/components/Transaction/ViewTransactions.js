@@ -14,7 +14,6 @@ import {
   DialogContent,
   DialogActions
 } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import CustomNoRowsOverlay from './CustomNoRowsOverlay';
 import { getListTransactions } from '../../services/TransactionService';
