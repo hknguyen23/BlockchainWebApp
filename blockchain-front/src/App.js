@@ -23,7 +23,6 @@ export default function App() {
   const userID = localStorage.getItem('userID');
   const [isLoggedIn, setIsLoggedIn] = useState(userID !== null);
   const [user, setUser] = useState({});
-  const [wallet, setWallet] = useState({});
 
   useEffect(() => {
     getUser(userID)
@@ -31,7 +30,6 @@ export default function App() {
         console.log(result);
         if (result.success) {
           setUser(result.user);
-          setWallet(result.user.wallet);
         }
       })
       .catch(error => {
@@ -51,20 +49,20 @@ export default function App() {
       main: () => <Profile user={user} />
     }, {
       path: "/transactions/add",
-      main: () => <AddTransaction user={user} />
+      main: () => <AddTransaction />
     }, {
       path: "/transactions/view",
-      main: () => <ViewTransactions user={user} />
+      main: () => <ViewTransactions />
     }, {
       path: "/getMoney",
-      main: () => <GetMoney wallet={wallet} />
+      main: () => <GetMoney user={user} />
     }, {
       path: "/error",
       main: () => <ErrorScreen />
     }, {
       path: "/",
       exact: true,
-      main: () => <Home isLoggedIn={isLoggedIn} user={user} wallet={wallet} />
+      main: () => <Home isLoggedIn={isLoggedIn} user={user} />
     }
   ];
 

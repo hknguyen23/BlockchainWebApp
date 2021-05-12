@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Button, Snackbar } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
+import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { updateWallet } from '../../services/WalletService';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -20,36 +17,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function GetMoney({ wallet }) {
+export default function GetMoney({ user }) {
   const classes = useStyles();
-  const history = useHistory();
-  const [money, setMoney] = useState(wallet.TotalCount);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [isSuccessRequest, setIsSuccessRequest] = useState(false);
-  const [responseMessage, setResponseMessage] = useState('');
+  const [money, setMoney] = useState(user.wallet.TotalCount);
 
   const handleChangeMoney = () => {
-    const data = {
-      id: wallet.ID,
-      money
-    }
-    updateWallet(data)
-      .then(result => {
-        setIsSuccessRequest(result.success);
-        setOpenSnackbar(true);
-        if (result.success) {
-          setResponseMessage('Successfully proceeded');
-        } else {
-          setResponseMessage(result.msg);
-        }
-      })
-      .catch(error => {
-        history.push('/error', { errorMessage: error });
-      });
-  }
 
-  const handleCloseSnackbar = () => {
-    setOpenSnackbar(false);
   }
 
   return (
@@ -73,19 +46,6 @@ export default function GetMoney({ wallet }) {
       </div>
       <Button style={{ border: '1px solid #fda92c' }} onClick={handleChangeMoney}>OK</Button>
 
-      <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        open={openSnackbar}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert
-          severity={isSuccessRequest ? "success" : "error"}
-          color={isSuccessRequest ? "success" : "error"}
-          variant="filled"
-        >
-          {responseMessage}
-        </Alert>
-      </Snackbar>
     </React.Fragment>
   );
 }
