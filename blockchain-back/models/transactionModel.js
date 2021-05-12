@@ -9,6 +9,6 @@ module.exports = {
     ORDER BY T.DateAdded DESC
   `),
 
-  addTransaction: entity => db.add('Transactions', entity)
+  addTransaction: entity => db.add('Transactions', entity),
 
 }
