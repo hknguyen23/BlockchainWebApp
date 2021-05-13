@@ -110,6 +110,7 @@ export default function ViewTransactions({ user }) {
   const history = useHistory();
 
   const [transactions, setTransactions] = useState([]);
+  const [tempTransactions, setTempTransactions] = useState([]);
   const [pageSize, setPageSize] = useState(config.PAGE_SIZE);
   const [searchFieldValue, setSearchFieldValue] = useState('');
 
@@ -143,7 +144,7 @@ export default function ViewTransactions({ user }) {
       headerAlign: 'center',
       align: 'center',
       valueFormatter: (params) => {
-        return moment(params.getValue('DateAdded')).format(config.FORMAT_DATETIME_PATTER.DATE_TIME);
+        return moment(params.getValue('dateAdded')).format(config.FORMAT_DATETIME_PATTER.DATE_TIME);
       }
     }
   ];
@@ -159,11 +160,12 @@ export default function ViewTransactions({ user }) {
   }, []);
 
   const handleSearch = () => {
-
+    setTempTransactions(transactions);
+    setTransactions(transactions.filter(transaction => transaction.receiver === searchFieldValue));
   }
 
   const handleReset = () => {
-
+    setTransactions(tempTransactions);
   }
 
   return (
@@ -191,11 +193,11 @@ export default function ViewTransactions({ user }) {
 
             <Button className={classes.button} variant="contained" color="primary" onClick={handleSearch}>
               Search Button
-          </Button>
+            </Button>
 
             <Button className={classes.button} variant="outlined" color="primary" onClick={handleReset}>
               Reset Button
-          </Button>
+            </Button>
           </Toolbar>
         </div >
 

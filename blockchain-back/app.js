@@ -48,6 +48,6 @@ app.use(function (req, res, next) {
 
 server.listen(process.env.PORT || config.PORT, () => {
   console.log(`Backend APIs is running at http://localhost:${config.PORT}`)
-})
+});
 
 module.exports = io;

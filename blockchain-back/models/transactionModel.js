@@ -5,7 +5,7 @@ module.exports = {
     SELECT ID as id, Amount as amount, DateAdded as dateAdded, ReceiverAddress as receiver
     FROM Transactions
     WHERE SenderAddress = ?
-    ORDER BY DateAdded DESC
+    ORDER BY DateAdded
   `, address),
 
   addTransaction: entity => db.add('Transactions', entity),

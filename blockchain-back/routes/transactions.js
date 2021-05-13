@@ -3,7 +3,8 @@ const router = express.Router();
 const transactionModel = require('../models/transactionModel');
 const userModel = require('../models/userModel');
 const walletModel = require('../models/walletModel');
-const { getUUID, convertToRegularDateTime } = require('../utils/helper');
+const { getUUID, convertToRegularDateTime, saveBlockchainToFile } = require('../utils/helper');
+const { generateBlock, getBlockchain, isValidChain } = require('../models/block');
 
 router.get('/:address', async (req, res, next) => {
   const address = req.params.address;
@@ -35,6 +36,13 @@ router.post('/add', async (req, res, next) => {
     walletModel.getWalletByAddress(receiverAddress)
   ]);
 
+  if (senderWallet[0].Balance < amount) {
+    return res.json({
+      success: false,
+      msg: 'You don\'t have enough money to do this transaction. Your current balance: ' + senderWallet[0].Balance
+    });
+  }
+
   const [updateSenderWallet, updateReceiverWallet] = await Promise.all([
     walletModel.updateWallet(senderAddress, { Balance: senderWallet[0].Balance - amount }),
     walletModel.updateWallet(receiverAddress, { Balance: receiverWallet[0].Balance + amount })
@@ -50,7 +58,15 @@ router.post('/add', async (req, res, next) => {
 
   const addTransaction = await transactionModel.addTransaction(entity);
   if (addTransaction.affectedRows === 1) {
-    return res.json({ success: true, msg: 'added' });
+    const newBlock = generateBlock(entity);
+    const blockchain = getBlockchain();
+    blockchain.push(newBlock);
+    if (isValidChain(blockchain)) {
+      saveBlockchainToFile(blockchain);
+      return res.json({ success: true, msg: 'added' });
+    } else {
+      return res.json({ success: false, msg: 'Invalid blockchain' });
+    }
   } else {
     return res.json({ success: false, msg: 'Something wrong happened when creating transaction' });
   }

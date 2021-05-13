@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   Button,
@@ -99,7 +99,6 @@ export default function AddTransaction({ wallet }) {
     const hasError = errorList.filter((v) => v[1] !== '').length > 0;
     if (hasError) {
       setIsError(true);
-      window.scrollTo(0, 0);
     } else {
       const data = {
         senderAddress: wallet.PublicKey,

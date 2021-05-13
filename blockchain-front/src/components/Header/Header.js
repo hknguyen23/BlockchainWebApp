@@ -1,10 +1,11 @@
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
   Button,
   Typography,
   AppBar,
-  Toolbar
+  Toolbar,
+  Link
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -64,17 +65,21 @@ export default function Header({ isLoggedIn, setIsLoggedIn }) {
     history.push('/profile');
   }
 
+  const handleSignIn = () => {
+    history.push('/signin');
+  }
+
   return (
     <div>
       <AppBar className={classes.header}>
         <Toolbar>
-          <Link to='/' style={{ cursor: 'pointer' }}>
+          <Link href='/' style={{ cursor: 'pointer' }}>
             <div className={classes.logo}>
               <img src={logo} alt="logo" width={50} height={50} />
             </div>
           </Link>
 
-          <Link to='/' style={{ cursor: 'pointer', textDecoration: 'none' }}>
+          <Link href='/' style={{ cursor: 'pointer', textDecoration: 'none' }}>
             <Typography className={classes.name}>My Coin</Typography>
           </Link>
 
@@ -94,12 +99,10 @@ export default function Header({ isLoggedIn, setIsLoggedIn }) {
               </Button>
             </React.Fragment>
             : <React.Fragment>
-              <Button className={classes.button} variant="contained">
-                <Link to='/signin' style={{ textDecoration: 'none' }}>
-                  <Typography className={classes.buttonText}>
-                    Login
-                  </Typography>
-                </Link>
+              <Button className={classes.button} variant="contained" onClick={handleSignIn}>
+                <Typography className={classes.buttonText}>
+                  Login
+                </Typography>
               </Button>
             </React.Fragment>}
         </Toolbar>
